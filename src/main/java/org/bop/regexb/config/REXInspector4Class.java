@@ -42,11 +42,19 @@ public class REXInspector4Class {
 		 return result;
 	}
 
+	public static REXConfig4Class getREXConfig(Class<?> targetClass) {
+		return (REXConfig4Class) targetClass.getAnnotation(REXConfig4Class.class);
+	}
+
+	public static boolean isREXConfig(Object fieldValue) {
+		return getREXConfig(fieldValue.getClass()) != null;
+	}
+
 	private String pattern = "";
 	private List<REXField> patternFields = new ArrayList<REXField>();
 
 	private REXInspector4Class(Class<?> targetClass) {
-		REXConfig4Class cfg = (REXConfig4Class) targetClass.getAnnotation(REXConfig4Class.class);
+		REXConfig4Class cfg = getREXConfig(targetClass);
 		if (cfg == null || cfg.rexPieces() == null) return;
 		for (String currPattern : cfg.rexPieces()) {
 			REXField patField = new REXField(targetClass, currPattern);

@@ -79,6 +79,17 @@ public class REXParserTest2 {
 		assertEquals(name, param.getName());
 		assertEquals(value, param.getValue());
 	}
+
+	@Test
+	public void testModelToString() {
+		System.out.println(new ModelToString(model).toString());
+		assertEquals("[http,[-],[myUser,[-],myPassw],theHost.com,9090,[-],[path1,path2,path3,path4],[-],[[par1,val1],[par2,val2],[par3,val3]],fragment]",
+				new ModelToString(model).toString());
+		System.out.println(new ModelToString(model.getParams()));
+		assertEquals("[[par1,val1],[par2,val2],[par3,val3]]", new ModelToString(model.getParams()).toString());
+		assertEquals("{myUser;{---};myPassw}", new ModelToString(model.getAuth(), ";", "{", "}", "---", "???").toString());
+		assertEquals(new ModelToString("abc123").toString(), "abc123");
+	}
 }
 
 
@@ -126,7 +137,7 @@ class MyURI {
 	public void setFragment(String fragment) { this.fragment = fragment; }
 }
 
-@REXConfig4Class(rexPieces={"user", ":", "password", "@"})
+@REXConfig4Class(rexPieces={"user", ":", "password"})
 class MyURIAuth {
 
 	@REXConfig4String(pattern=@REXConfig4Field(value="[^:]*"))
@@ -139,7 +150,7 @@ class MyURIAuth {
 	public void setUser(String user) { this.user = user; }
 	public String getPassword() { return password; }
 	public void setPassword(String password) { this.password = password; }
-	public String toString() { return user + "=" + password + "@"; }
+	public String toString() { return user + ":" + password; }
 }
 
 @REXConfig4Class(rexPieces={"name", "value"})
