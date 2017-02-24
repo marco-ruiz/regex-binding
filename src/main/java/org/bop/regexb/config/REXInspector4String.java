@@ -37,7 +37,7 @@ public class REXInspector4String {
 	private String pattern;
 	private boolean listField;
 
-	public REXInspector4String(Field field) throws SecurityException, NoSuchFieldException {
+	public REXInspector4String(Field field) {
 		this.field     = field;
 		this.listField = List.class.isAssignableFrom(field.getType());
 		this.cfg       = field.getAnnotation(REXConfig4String.class);

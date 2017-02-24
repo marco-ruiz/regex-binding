@@ -35,7 +35,7 @@ public class REXInspector4ListElement {
 	private String fullPattern = "";
 	private String[] elePatterns;
 
-	public REXInspector4ListElement(Field field) throws SecurityException, NoSuchFieldException {
+	public REXInspector4ListElement(Field field) {
 		this.cfg = field.getAnnotation(REXConfig4ListElement.class);
 		if (cfg == null) return;
 

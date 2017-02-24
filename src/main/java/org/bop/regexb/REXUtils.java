@@ -17,11 +17,12 @@
 package org.bop.regexb;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.bop.regexb.config.REXField;
+import java.util.stream.Collectors;
 
 /**
  * @author Marco Ruiz
@@ -39,9 +40,7 @@ public class REXUtils {
 	}
 
 	public static String options(String... options) {
-		StringBuffer result = new StringBuffer();
-		for (int idx = 0; idx < options.length - 1; idx++) result.append(options[idx] + "|");
-		return group(result + options[options.length - 1]);
+		return group(Arrays.stream(options).collect(Collectors.joining("|")));
 	}
 
 	public static String group(String content) {
@@ -49,40 +48,29 @@ public class REXUtils {
 	}
 
 	public static List<String> extractGroups(String text, String regExp, int... groupIds) {
-		List<String> result = new ArrayList<String>(groupIds.length);
-        Pattern pattern = Pattern.compile(regExp);
-	    Matcher matcher = pattern.matcher(text);
-	    if (matcher.find()) {
-	    	for (int idx = 0; idx < groupIds.length; idx++)
-	    		result.add(matcher.group(groupIds[idx]));
-		}
-		return result;
+        Matcher matcher = Pattern.compile(regExp).matcher(text);
+    	return (!matcher.find()) ? new ArrayList<>() :
+    		Arrays.stream(groupIds).collect(ArrayList::new, (list, id) -> list.add(matcher.group(id)), List::addAll);
 	}
 
 	public static List<List<String>> findRepeats(String text, String[] regExps, boolean trim) {
-		String wholeRegExp = "";
-		for (String regExp : regExps) wholeRegExp += regExp;
-		List<String> matches = findRepeats(text, wholeRegExp, trim);
-
-		List<List<String>> result = new ArrayList<List<String>>();
-		for (String match : matches) result.add(findSequentialMatches(match, regExps));
-		return result;
+		return findRepeats(REXUtils::findSequentialMatches, text, regExps, trim);
 	}
 
 	public static List<List<String>> findRepeatsStrong(String text, String[] regExps, boolean trim) {
-		String wholeRegExp = "";
-		for (String regExp : regExps) wholeRegExp += regExp;
-		List<String> matches = findRepeats(text, wholeRegExp, trim);
+		return findRepeats(REXUtils::findSequentialMatchesStrong, text, regExps, trim);
+	}
 
-		List<List<String>> result = new ArrayList<List<String>>();
-		for (String match : matches) result.add(findSequentialMatchesStrong(match, regExps));
-		return result;
+	public static List<List<String>> findRepeats(BiFunction<String, String[], List<String>> sequentialMatcher, String text, String[] regExps, boolean trim) {
+		String wholeRegExp = Arrays.stream(regExps).collect(Collectors.joining());
+		return findRepeats(text, wholeRegExp, trim).stream()
+				.map(match -> sequentialMatcher.apply(match, regExps))
+				.collect(Collectors.toList());
 	}
 
 	public static List<String> findRepeats(String text, String regExp, boolean trim) {
 		List<String> result = new ArrayList<String>();
-        Pattern pattern = Pattern.compile(regExp);
-	    Matcher matcher = pattern.matcher(text);
+        Matcher matcher = Pattern.compile(regExp).matcher(text);
 	    while (matcher.find()) {
 	        String match = matcher.group();
 	        if (match != null && !match.equals("")) result.add(trim ? match.trim() : match);
@@ -90,39 +78,26 @@ public class REXUtils {
 		return result;
 	}
 
-	public static List<String> findSequentialMatches2(String source, List<REXField> patFields) {
-		return findSequentialMatches(source, patFields.stream().map(REXField::getPattern).toArray(String[]::new));
-	}
-
-	public static List<String> findSequentialMatches(String source, List<REXField> patFields) {
-		String[] regExps = new String[patFields.size()];
-		for (int idx = 0; idx < patFields.size(); idx++) regExps[idx] = patFields.get(idx).getPattern();
-		return findSequentialMatches(source, regExps);
-	}
-
-	public static List<String> findSequentialMatches(String source, String... regExps) {
+	public static List<String> findSequentialMatches(String text, String... regExps) {
 		List<String> result = new ArrayList<String>();
 		for (String regExp : regExps) {
-			Matcher matcher = Pattern.compile(regExp).matcher(source);
-			if (matcher.find()) {
-				result.add(matcher.group());
-				source = source.substring(matcher.end());
-			} else {
-				result.add(null);
-			}
+			Matcher matcher = Pattern.compile(regExp).matcher(text);
+			String match = matcher.find() ? matcher.group() : null;
+			if (match != null) text = text.substring(matcher.end());
+			result.add(match);
         }
 		return result;
 	}
 
-	public static List<String> findSequentialMatchesStrong(String source, String... regExps) {
+	public static List<String> findSequentialMatchesStrong(String text, String... regExps) {
 		List<String> result = new ArrayList<String>();
 
 		for (int index = 0; index < regExps.length; index++) {
 			String wholeRegExp = createRegExp(index, regExps);
-			Matcher matcher = Pattern.compile(wholeRegExp).matcher(source);
+			Matcher matcher = Pattern.compile(wholeRegExp).matcher(text);
 			if (matcher.find()) {
 				result.add(matcher.group(1));
-				source = source.substring(matcher.end(1));
+				text = text.substring(matcher.end(1));
 			}
 		}
 

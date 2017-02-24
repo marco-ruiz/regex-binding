@@ -29,11 +29,11 @@ public class REXInspector4Class {
 
 	private static Map<Class, REXInspector4Class> cache = new HashMap<Class, REXInspector4Class>();
 
-	public static String getConfigPattern(Class targetClass) throws SecurityException, NoSuchFieldException {
+	public static String getConfigPattern(Class<?> targetClass) {
 		return getConfig(targetClass).getPattern();
 	}
 
-	public static REXInspector4Class getConfig(Class targetClass) throws SecurityException, NoSuchFieldException {
+	public static REXInspector4Class getConfig(Class<?> targetClass) {
 		REXInspector4Class result = cache.get(targetClass);
 		 if (result == null) {
 			 result = new REXInspector4Class(targetClass);
@@ -45,7 +45,7 @@ public class REXInspector4Class {
 	private String pattern = "";
 	private List<REXField> patternFields = new ArrayList<REXField>();
 
-	private REXInspector4Class(Class targetClass) throws SecurityException {
+	private REXInspector4Class(Class<?> targetClass) {
 		REXConfig4Class cfg = (REXConfig4Class) targetClass.getAnnotation(REXConfig4Class.class);
 		if (cfg == null || cfg.rexPieces() == null) return;
 		for (String currPattern : cfg.rexPieces()) {
