@@ -111,7 +111,7 @@ class MyURI {
 	private String fragment;
 
 	public String getScheme() { return scheme; }
-	public void setScheme(String scheme) { this.scheme = scheme; }
+//	public void setScheme(String scheme) { this.scheme = scheme; }
 	public MyURIAuth getAuth() { return auth; }
 	public void setAuth(MyURIAuth auth) { this.auth = auth; }
 	public String getHost() { return host; }

@@ -22,8 +22,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.bop.regexb.config.REXField;
 import org.bop.regexb.config.REXInspector4Class;
@@ -45,6 +43,10 @@ public class REXParser {
         } catch (Exception e) {
 			throw new REXException("Could not create an instance of class '" + modelClass + "'", e);
         }
+	}
+
+	public static <MODEL_TYPE> MODEL_TYPE populateModel(MODEL_TYPE model, String src) throws REXException {
+		return populateModel(model, src);
 	}
 
 	public static <MODEL_TYPE> MODEL_TYPE populateModel(MODEL_TYPE model, String src, boolean preCleaunUpSpaces) throws REXException {
@@ -93,13 +95,16 @@ public class REXParser {
 	    return (fieldClass.equals(String.class)) ? (ELE_TYPE) matchSource : createModel(fieldClass, matchSource);
     }
 
-	private static <MODEL_TYPE> void setProperty(MODEL_TYPE model, Field field, Object modelValue) throws Exception {
+	private static <MODEL_TYPE> void setProperty(MODEL_TYPE model, Field field, Object fieldValue) throws IllegalArgumentException, IllegalAccessException {
 	    // Introspect setter
 		String setterName = "set" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
-        Method setter = field.getDeclaringClass().getDeclaredMethod(setterName, new Class[]{field.getType()});
-
-        // Set property
-        setter.invoke(model, new Object[]{modelValue});
+		try {
+	        Method setter = field.getDeclaringClass().getDeclaredMethod(setterName, new Class[]{field.getType()});
+	        setter.invoke(model, new Object[]{fieldValue});
+		} catch (Exception e) {
+	        field.setAccessible(true);
+	        field.set(model, fieldValue);
+		}
     }
 }
 
