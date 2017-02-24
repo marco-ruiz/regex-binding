@@ -79,12 +79,12 @@ public class ModelToString {
 
 	private String toOrString(REXField rexField) {
 		List<Field> patFields = rexField.getFields();
-		if (patFields == null || patFields.size() == 0) return marks.missField;
+		if (patFields == null || patFields.size() == 0) return marks.missedField;
 		return patFields.stream()
 					.map(this::getFieldValue)
 					.map(this::toModelString)
-					.filter(str -> !str.equals(marks.missValue))
-					.findFirst().orElse(marks.missValue);
+					.filter(str -> !str.equals(marks.missedValue))
+					.findFirst().orElse(marks.missedValue);
 	}
 
 	private Object getFieldValue(Field field) {
@@ -92,22 +92,19 @@ public class ModelToString {
 			field.setAccessible(true);
 			return field.get(model);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			return marks.missField;
+			return marks.missedField;
 		}
 	}
 }
 
 class StringMarks {
-	public final String delimiter, prefix, suffix, missField, missValue;
+	public final String missedField, missedValue;
 	public final Collector<CharSequence, ?, String> joiner;
 
-	public StringMarks(String delimiter, String prefix, String suffix, String missField, String missValue) {
-		this.delimiter = delimiter;
-		this.prefix = prefix;
-		this.suffix = suffix;
-		this.missField = prefix + missField + suffix;
-		this.missValue = prefix + missValue + suffix;
+	public StringMarks(String delimiter, String prefix, String suffix, String missedField, String missedValue) {
 		this.joiner = Collectors.joining(delimiter, prefix, suffix);
+		this.missedField = prefix + missedField + suffix;
+		this.missedValue = prefix + missedValue + suffix;
 	}
 }
 
