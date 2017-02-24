@@ -55,8 +55,7 @@ public class REXParserTest1 {
 				+ " in[fixed.nrrd]:http://www.na-mic.org/ViewVC/index.cgi/trunk/Libs/MRML/Testing/TestData/fixed.nrrd?view=co"
 				+ " in[moving.nrrd]:http://www.na-mic.org/ViewVC/index.cgi/trunk/Libs/MRML/Testing/TestData/moving.nrrd?view=co";
 
-		stmt = new Statement();
-		REXParser.populateModel(stmt, p2el, false);
+		stmt = new REXParser<>(new Statement()).populateModel(p2el, false);
 	}
 
 	private VarDefinition getVar(int index) {

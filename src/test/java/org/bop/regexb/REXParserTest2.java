@@ -39,7 +39,7 @@ public class REXParserTest2 {
 	@Before
 	public void setUp() throws Exception {
 		text = "http://myUser:myPassw@theHost.com:9090/path1/path2/path3/path4?par1=val1&par2=val2&par3=val3#fragment";
-		model = REXParser.createModel(MyURI.class, text);
+		model = new REXParser<>(MyURI.class).populateModel(text);
 	}
 
 	@Test
@@ -115,7 +115,7 @@ class MyURI {
 	@REXConfig4ListElement(pattern=@REXConfig4Field(value="[^/?]*", suffix="(/|\\?)"), min=0)
 	private List<String> path;
 
-	@REXConfig4ListElement(pattern=@REXConfig4Field(value="[^&]*"))
+	@REXConfig4ListElement(pattern=@REXConfig4Field(value="[^&]*"), min=0)
 	private List<MyURIParameter> params;
 
 	@REXConfig4String(optional=true)
