@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package org.bop.regexb.config;
+package org.bop.regexb.inspect;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+
+import org.bop.regexb.inspect.config.REXConfig4ListElement;
 
 /**
  * @author Marco Ruiz
@@ -43,8 +45,7 @@ public class REXInspector4ListElement {
 		pattern = eleClass.equals(String.class) ?
 			REXInspector4String.getValueFrom(cfg.pattern()) : REXInspector4Class.getConfigPattern(eleClass);
 
-		String maxStr = "";
-		if (cfg.max() >= 0) maxStr += cfg.max();
+		String maxStr = (cfg.max() < 0) ? "" : "" + cfg.max();
 		fullPattern = "(" + cfg.pattern().prefix() + pattern + cfg.pattern().suffix() + "){" + cfg.min() + "," + maxStr +"}";
 	}
 

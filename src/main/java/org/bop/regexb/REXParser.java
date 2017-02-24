@@ -23,9 +23,9 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bop.regexb.config.REXField;
-import org.bop.regexb.config.REXInspector4Class;
-import org.bop.regexb.config.REXInspector4String;
+import org.bop.regexb.inspect.REXField;
+import org.bop.regexb.inspect.REXInspector4Class;
+import org.bop.regexb.inspect.REXInspector4String;
 
 /**
  * @author Marco Ruiz

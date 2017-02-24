@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package org.bop.regexb.config;
+package org.bop.regexb.inspect;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.bop.regexb.inspect.config.REXConfig4Class;
 
 /**
  * @author Marco Ruiz

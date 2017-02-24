@@ -20,10 +20,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.bop.regexb.config.REXConfig4Class;
-import org.bop.regexb.config.REXConfig4Field;
-import org.bop.regexb.config.REXConfig4ListElement;
-import org.bop.regexb.config.REXConfig4String;
+import org.bop.regexb.inspect.config.REXConfig4Class;
+import org.bop.regexb.inspect.config.REXConfig4Field;
+import org.bop.regexb.inspect.config.REXConfig4ListElement;
+import org.bop.regexb.inspect.config.REXConfig4String;
 import org.junit.Before;
 import org.junit.Test;
 

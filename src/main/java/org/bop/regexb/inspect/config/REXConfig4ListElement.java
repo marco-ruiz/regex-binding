@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.bop.regexb.config;
+package org.bop.regexb.inspect.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -26,11 +26,17 @@ import java.lang.annotation.Target;
  * @author Marco Ruiz
  * @since Jul 23, 2008
  */
-@Target({ElementType.TYPE})
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-public @interface REXConfig4Class {
+public @interface REXConfig4ListElement {
+	
+	REXConfig4Field pattern() default @REXConfig4Field;
 
-	String[] rexPieces() default {};
-
+	// Not used yet
+	String separator() default ",";
+	
+	int min() default 0;
+	
+	int max() default -1;
 }

@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.bop.regexb.config.REXField;
-import org.bop.regexb.config.REXInspector4Class;
+import org.bop.regexb.inspect.REXField;
+import org.bop.regexb.inspect.REXInspector4Class;
 
 /**
  * @author Marco Ruiz

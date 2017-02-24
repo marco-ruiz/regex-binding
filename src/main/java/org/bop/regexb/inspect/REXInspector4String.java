@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package org.bop.regexb.config;
+package org.bop.regexb.inspect;
 
 import java.lang.reflect.Field;
 import java.util.List;
+
+import org.bop.regexb.inspect.config.REXConfig4Field;
+import org.bop.regexb.inspect.config.REXConfig4String;
 
 /**
  * @author Marco Ruiz

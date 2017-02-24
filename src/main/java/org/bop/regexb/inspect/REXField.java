@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.bop.regexb.config;
+package org.bop.regexb.inspect;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
