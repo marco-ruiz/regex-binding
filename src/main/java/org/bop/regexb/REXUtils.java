@@ -1,12 +1,12 @@
 /*
  * Copyright 2007-2008 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,29 +32,28 @@ public class REXUtils {
 	public static String repeat(String expr, int min) {
 		return repeat(expr, min, -1);
 	}
-	
+
 	public static String repeat(String expr, int min, int max) {
 		String maxStr = max < 0 ? "" : "" + max;
 		return group(expr) + "{" + min + "," + maxStr + "}";
 	}
-	
+
 	public static String options(String... options) {
 		StringBuffer result = new StringBuffer();
 		for (int idx = 0; idx < options.length - 1; idx++) result.append(options[idx] + "|");
 		return group(result + options[options.length - 1]);
 	}
-	
+
 	public static String group(String content) {
 		return "(" + content + ")";
 	}
-	
 
 	public static List<String> extractGroups(String text, String regExp, int... groupIds) {
 		List<String> result = new ArrayList<String>(groupIds.length);
         Pattern pattern = Pattern.compile(regExp);
 	    Matcher matcher = pattern.matcher(text);
 	    if (matcher.find()) {
-	    	for (int idx = 0; idx < groupIds.length; idx++) 
+	    	for (int idx = 0; idx < groupIds.length; idx++)
 	    		result.add(matcher.group(groupIds[idx]));
 		}
 		return result;
@@ -64,7 +63,7 @@ public class REXUtils {
 		String wholeRegExp = "";
 		for (String regExp : regExps) wholeRegExp += regExp;
 		List<String> matches = findRepeats(text, wholeRegExp, trim);
-		
+
 		List<List<String>> result = new ArrayList<List<String>>();
 		for (String match : matches) result.add(findSequentialMatches(match, regExps));
 		return result;
@@ -74,7 +73,7 @@ public class REXUtils {
 		String wholeRegExp = "";
 		for (String regExp : regExps) wholeRegExp += regExp;
 		List<String> matches = findRepeats(text, wholeRegExp, trim);
-		
+
 		List<List<String>> result = new ArrayList<List<String>>();
 		for (String match : matches) result.add(findSequentialMatchesStrong(match, regExps));
 		return result;
@@ -89,6 +88,10 @@ public class REXUtils {
 	        if (match != null && !match.equals("")) result.add(trim ? match.trim() : match);
         }
 		return result;
+	}
+
+	public static List<String> findSequentialMatches2(String source, List<REXField> patFields) {
+		return findSequentialMatches(source, patFields.stream().map(REXField::getPattern).toArray(String[]::new));
 	}
 
 	public static List<String> findSequentialMatches(String source, List<REXField> patFields) {
@@ -125,12 +128,12 @@ public class REXUtils {
 
 		return result;
 	}
-	
+
 	private static String createRegExp(int fromIndex, String[] regExps) {
 		String result = "(" + regExps[fromIndex] + ")";
 		for (fromIndex++; fromIndex < regExps.length; fromIndex++)
 	        result += regExps[fromIndex];
-	        
+
 		return result;
 	}
 }

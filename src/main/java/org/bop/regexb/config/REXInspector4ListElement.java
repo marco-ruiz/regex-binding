@@ -1,12 +1,12 @@
 /*
  * Copyright 2007-2008 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,7 @@ import java.lang.reflect.ParameterizedType;
  * @since Jul 27, 2008
  */
 public class REXInspector4ListElement {
-	
+
 	public static <T> Class<T> getListElementClass(Field field) {
 	    ParameterizedType genericSuperclass = (ParameterizedType)field.getGenericType();
 	    return (Class<T>) genericSuperclass.getActualTypeArguments()[0];
@@ -38,10 +38,10 @@ public class REXInspector4ListElement {
 	public REXInspector4ListElement(Field field) throws SecurityException, NoSuchFieldException {
 		this.cfg = field.getAnnotation(REXConfig4ListElement.class);
 		if (cfg == null) return;
-		
+
 		Class<Object> eleClass = getListElementClass(field);
-		pattern = eleClass.equals(String.class) ? 
-			cfg.pattern().field() : REXInspector4Class.getConfig(eleClass).getPattern();
+		pattern = eleClass.equals(String.class) ?
+			REXInspector4String.getValueFrom(cfg.pattern()) : REXInspector4Class.getConfigPattern(eleClass);
 
 		String maxStr = "";
 		if (cfg.max() >= 0) maxStr += cfg.max();

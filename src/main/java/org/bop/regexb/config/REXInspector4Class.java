@@ -1,12 +1,12 @@
 /*
  * Copyright 2007-2008 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,11 @@ import java.util.Map;
 public class REXInspector4Class {
 
 	private static Map<Class, REXInspector4Class> cache = new HashMap<Class, REXInspector4Class>();
-	
+
+	public static String getConfigPattern(Class targetClass) throws SecurityException, NoSuchFieldException {
+		return getConfig(targetClass).getPattern();
+	}
+
 	public static REXInspector4Class getConfig(Class targetClass) throws SecurityException, NoSuchFieldException {
 		REXInspector4Class result = cache.get(targetClass);
 		 if (result == null) {
@@ -37,10 +41,10 @@ public class REXInspector4Class {
 		 }
 		 return result;
 	}
-	
+
 	private String pattern = "";
 	private List<REXField> patternFields = new ArrayList<REXField>();
-	
+
 	private REXInspector4Class(Class targetClass) throws SecurityException {
 		REXConfig4Class cfg = (REXConfig4Class) targetClass.getAnnotation(REXConfig4Class.class);
 		if (cfg == null || cfg.rexPieces() == null) return;
@@ -50,11 +54,11 @@ public class REXInspector4Class {
 		    patternFields.add(patField);
         }
 	}
-	
+
 	public String getPattern() {
 		return pattern;
 	}
-	
+
 	public List<REXField> getPatternFields() {
 	    return patternFields;
     }

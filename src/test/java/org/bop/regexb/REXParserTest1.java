@@ -16,7 +16,9 @@
 
 package org.bop.regexb;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -141,7 +143,7 @@ public class REXParserTest1 {
 class Statement {
 	@REXConfig4ListElement(min=0)
 	public List<VarDefinition> vars;
-	@REXConfig4String(pattern=@REXConfig4Field(field=".*"))
+	@REXConfig4String(pattern=@REXConfig4Field(value=".*"))
 	public String template;
 	public List<VarDefinition> getVars() { return vars; }
 	public void setVars(List<VarDefinition> vars) { this.vars = vars; }
@@ -167,10 +169,10 @@ class VarDefinition {
 
 @REXConfig4Class(rexPieces={"\\$\\{", "id", "dims", "\\}"})
 class VarDeclaration {
-	@REXConfig4String(pattern=@REXConfig4Field(field="[a-zA-Z]\\w*"))
+	@REXConfig4String(pattern=@REXConfig4Field(value="[a-zA-Z]\\w*"))
 	public String id;
 	@REXConfig4String(optional=true, pattern=@REXConfig4Field(prefix="\\(", suffix="\\)"))
-	@REXConfig4ListElement(pattern=@REXConfig4Field(field="[\\w]*", suffix="[,]?"), min=1)
+	@REXConfig4ListElement(pattern=@REXConfig4Field(value="[\\w]*", suffix="[,]?"), min=1)
 	public List<String> dims;
 	public String getId() { return id; }
 	public void setId(String id) { this.id = id; }
@@ -181,7 +183,7 @@ class VarDeclaration {
 
 @REXConfig4Class(rexPieces={"value"})
 class VarValue {
-	@REXConfig4String(pattern=@REXConfig4Field(prefix="\\[", field="([^\\[\\]]*)", suffix="\\]"))
+	@REXConfig4String(pattern=@REXConfig4Field(prefix="\\[", value="([^\\[\\]]*)", suffix="\\]"))
 	public String value;
 	public String getValue() { return value; }
 	public void setValue(String value) { this.value = value; }
@@ -190,10 +192,10 @@ class VarValue {
 
 @REXConfig4Class(rexPieces={"f:", "functionName", "\\(", "params", "\\)"})
 class FunctionInvocation {
-	@REXConfig4String(pattern=@REXConfig4Field(field="[a-zA-Z]\\w*"))
+	@REXConfig4String(pattern=@REXConfig4Field(value="[a-zA-Z]\\w*"))
 	public String functionName;
 	@REXConfig4String()
-	@REXConfig4ListElement(pattern=@REXConfig4Field(field="[^\\(\\),]*", suffix="[,]?"), min=1)
+	@REXConfig4ListElement(pattern=@REXConfig4Field(value="[^\\(\\),]*", suffix="[,]?"), min=1)
 	public List<String> params;
 	public String getFunctionName() { return functionName; }
 	public void setFunctionName(String functionName) { this.functionName = functionName; }

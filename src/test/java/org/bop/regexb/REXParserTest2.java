@@ -89,22 +89,22 @@ public class REXParserTest2 {
 @REXConfig4Class(rexPieces={"scheme", "://", "auth", "host", "port", "/", "path", "\\?", "params", "fragment"})
 class MyURI {
 
-	@REXConfig4String(pattern=@REXConfig4Field(field="[^:]*"))
+	@REXConfig4String(pattern=@REXConfig4Field(value="[^:]*"))
 	private String scheme;
 
 	@REXConfig4String(optional=true, pattern=@REXConfig4Field(suffix="@"))
 	private MyURIAuth auth;
 
-	@REXConfig4String(pattern=@REXConfig4Field(field="[^/:]*"))
+	@REXConfig4String(pattern=@REXConfig4Field(value="[^/:]*"))
 	private String host;
 
-	@REXConfig4String(optional=true, pattern=@REXConfig4Field(prefix=":", field="[^/]*"))
+	@REXConfig4String(optional=true, pattern=@REXConfig4Field(prefix=":", value="[^/]*"))
 	private String port;
 
-	@REXConfig4ListElement(pattern=@REXConfig4Field(field="[^/?]*", suffix="(/|\\?)"), min=0)
+	@REXConfig4ListElement(pattern=@REXConfig4Field(value="[^/?]*", suffix="(/|\\?)"), min=0)
 	private List<String> path;
 
-	@REXConfig4ListElement(pattern=@REXConfig4Field(field="[^&]*"))
+	@REXConfig4ListElement(pattern=@REXConfig4Field(value="[^&]*"))
 	private List<MyURIParameter> params;
 
 	@REXConfig4String(optional=true)
@@ -129,10 +129,10 @@ class MyURI {
 @REXConfig4Class(rexPieces={"user", ":", "password", "@"})
 class MyURIAuth {
 
-	@REXConfig4String(pattern=@REXConfig4Field(field="[^:]*"))
+	@REXConfig4String(pattern=@REXConfig4Field(value="[^:]*"))
 	private String user;
 
-	@REXConfig4String(pattern=@REXConfig4Field(field="[^@]*"))
+	@REXConfig4String(pattern=@REXConfig4Field(value="[^@]*"))
 	private String password;
 
 	public String getUser() { return user; }
@@ -145,10 +145,10 @@ class MyURIAuth {
 @REXConfig4Class(rexPieces={"name", "value"})
 class MyURIParameter {
 
-	@REXConfig4String(pattern=@REXConfig4Field(field="[^=]*", suffix="="))
+	@REXConfig4String(pattern=@REXConfig4Field(value="[^=]*", suffix="="))
 	private String name;
 
-	@REXConfig4String(pattern=@REXConfig4Field(field="[^&#]*", suffix="(&|#|$)"))
+	@REXConfig4String(pattern=@REXConfig4Field(value="[^&#]*", suffix="(&|#|$)"))
 	private String value;
 
 	public String getName() { return name; }
