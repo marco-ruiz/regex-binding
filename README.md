@@ -1,6 +1,6 @@
 # Regular Expression Binding
 
-This framework allows to bind structured data from text (strings) onto data model trees. Also, it allows to 
+This framework allows to bind structured data from text (strings) onto data model trees. Also, it allows to
 construct structured text (strings) from data model trees. The only requirement is to annotate the data model with the
 structure of the text that is going to be used to bind (marshall/unmarshall) data to and from.
 
@@ -46,7 +46,7 @@ need to be annotated with the instructions on how to bind them to the text; for 
 ```
 
 Then the rest of the data model tree needs to be similarly annotated (classes `OtherAnnotatedModelClass` and
-`YetAnotherModelAnnotatedClass`) and that's it! The model can be submitted to the framework for population through
+`YetAnotherModelAnnotatedClass`). Finally, the model can be submitted to the framework for population through
 different API utilities. Here are two of them:
 
 ```java
@@ -155,8 +155,6 @@ and its respective annotations (to instruct the framework about its **binding ru
 
 ```
 
-... and that's it.
-
 ### List of Strings
 
 Let's transform out path from a single `String` into a list of strings holding each of the *path branches*:
@@ -191,7 +189,7 @@ Let's transform out path from a single `String` into a list of strings holding e
 
 ```
 
-... and that's it. Since we only changed our minds how we wanted to hold the same data, we just needed to change our model and
+Since we only changed our minds how we wanted to hold the same data, we just needed to change our model and
 its **binding rules** to instruct the framework of the new preferences.
 
 ### List of nested objects
