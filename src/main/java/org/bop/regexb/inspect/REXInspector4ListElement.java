@@ -25,7 +25,7 @@ import org.bop.regexb.inspect.config.REXConfig4ListElement;
  * @author Marco Ruiz
  * @since Jul 27, 2008
  */
-public class REXInspector4ListElement {
+public class REXInspector4ListElement extends BaseREXInspector {
 
 	public static <T> Class<T> getListElementClass(Field field) {
 	    ParameterizedType genericSuperclass = (ParameterizedType)field.getGenericType();
@@ -33,31 +33,18 @@ public class REXInspector4ListElement {
     }
 
 	private REXConfig4ListElement cfg;
-	private String pattern = "";
-	private String fullPattern = "";
-	private String[] elePatterns;
 
 	public REXInspector4ListElement(Field field) {
 		this.cfg = field.getAnnotation(REXConfig4ListElement.class);
 		if (cfg == null) return;
 
 		Class<Object> eleClass = getListElementClass(field);
-		pattern = eleClass.equals(String.class) ?
-			REXInspector4String.getValueFrom(cfg.pattern()) : REXInspector4Class.getConfigPattern(eleClass);
+		String pattern = eleClass.equals(String.class) ?
+						REXInspector4String.getValueFrom(cfg.pattern()) :
+						REXInspector4Class.getConfigPattern(eleClass);
 
 		String maxStr = (cfg.max() < 0) ? "" : "" + cfg.max();
-		fullPattern = "(" + cfg.pattern().prefix() + pattern + cfg.pattern().suffix() + "){" + cfg.min() + "," + maxStr +"}";
+		String cardinality = "{" + cfg.min() + "," + maxStr +"}";
+		init(cfg.pattern(), pattern, cardinality);
 	}
-
-	public String getPattern() {
-    	return pattern;
-    }
-
-	public String getFullPattern() {
-		return fullPattern;
-    }
-
-	public String[] getPatterns() {
-		return new String[]{ cfg.pattern().prefix(), pattern, cfg.pattern().suffix() };
-    }
 }

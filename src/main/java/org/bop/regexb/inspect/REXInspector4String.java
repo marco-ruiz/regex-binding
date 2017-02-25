@@ -26,7 +26,7 @@ import org.bop.regexb.inspect.config.REXConfig4String;
  * @author Marco Ruiz
  * @since Jul 26, 2008
  */
-public class REXInspector4String {
+public class REXInspector4String extends BaseREXInspector {
 
 	public static String getValueFrom(REXConfig4Field fieldConfig) {
 		String result = fieldConfig.value();
@@ -37,30 +37,25 @@ public class REXInspector4String {
 	private Field field;
 	private REXConfig4String cfg;
 	private REXInspector4ListElement eleInspector;
-	private String pattern;
 	private boolean listField;
 
 	public REXInspector4String(Field field) {
-		this.field     = field;
-		this.listField = List.class.isAssignableFrom(field.getType());
-		this.cfg       = field.getAnnotation(REXConfig4String.class);
+		this.field        = field;
+		this.listField    = List.class.isAssignableFrom(field.getType());
+		this.cfg          = field.getAnnotation(REXConfig4String.class);
 		this.eleInspector = new REXInspector4ListElement(field);
 
-		this.pattern = (listField) ? eleInspector.getFullPattern() :
-			(cfg != null) ? getValueFrom(cfg.pattern()) : REXInspector4Class.getConfigPattern(field.getType());
+		String pattern = (listField) ? eleInspector.getFullPattern() : buildPattern(field);
+		String cardinality = (cfg != null && cfg.optional()) ? "?" : "";
+		init(cfg != null ? cfg.pattern() : null, pattern, cardinality);
+	}
+
+	private String buildPattern(Field field) {
+		return (cfg != null) ? getValueFrom(cfg.pattern()) : REXInspector4Class.getConfigPattern(field.getType());
 	}
 
 	public Field getField() {
     	return field;
-    }
-
-	public String getPattern() {
-    	return pattern;
-    }
-
-	public String getFullPattern() {
-		String fullPattern = (cfg != null) ? cfg.pattern().prefix() + pattern + cfg.pattern().suffix() : pattern;
-		return (cfg != null && cfg.optional()) ? "(" + fullPattern + ")?" : fullPattern;
     }
 
 	public boolean isListField() {
@@ -69,9 +64,5 @@ public class REXInspector4String {
 
 	public REXInspector4ListElement getEleInspector() {
 	    return eleInspector;
-    }
-
-	public String[] getPatterns() {
-		return (cfg != null) ? new String[]{ cfg.pattern().prefix(), pattern, cfg.pattern().suffix() } : new String[]{"", pattern, ""};
     }
 }
