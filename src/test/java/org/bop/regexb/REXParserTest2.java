@@ -81,6 +81,24 @@ public class REXParserTest2 {
 	}
 
 	@Test
+	public void testOptional() throws REXException {
+		MyURI uri;
+		uri = REXParser.createModel(MyURI.class, "http://myUser:myPassw@theHost.com:9090");
+		testOptional(uri, "myUser", "myPassw", "theHost.com");
+
+		uri = REXParser.createModel(MyURI.class, "http://theHost.com:9090");
+		testOptional(uri, "", "", "theHost.com");
+	}
+
+	private void testOptional(MyURI uri, String user, String password, String host) {
+		assertEquals(user, uri.getAuth().getUser());
+		assertEquals(password, uri.getAuth().getPassword());
+		assertEquals(host, uri.getHost());
+	}
+
+
+
+	@Test
 	public void testModelToString() {
 		System.out.println(new ModelToString(model).toString());
 		assertEquals("[http,[-],[myUser,[-],myPassw],theHost.com,9090,[-],[path1,path2,path3,path4],[-],[[par1,val1],[par2,val2],[par3,val3]],fragment]",
