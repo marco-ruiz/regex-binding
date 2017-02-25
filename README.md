@@ -1,8 +1,8 @@
 # Regular Expression Binding
 
-This project is a framework that allows to bind structured data from text (strings) onto data model trees; and equally
+This framework allows to bind structured data from text (strings) onto data model trees. Also, it allows to 
 construct structured text (strings) from data model trees. The only requirement is to annotate the data model with the
-structure of the text is going to translate from and to.
+structure of the text that is going to be used to bind (marshall/unmarshall) data to and from.
 
 ## Overview
 
@@ -34,13 +34,13 @@ need to be annotated with the instructions on how to bind them to the text; for 
 
 ```java
 
-	@REXConfig4String(optional=true, pattern=@REXConfig4Field(suffix="[REGEX]"))
+	@REXConfig4String(optional=[BOOLEAN], pattern=@REXConfig4Field(suffix="[REGEX]"))
 	private String firstField;
 
-	@REXConfig4String(pattern=@REXConfig4Field(value="[REGEX]"))
+	@REXConfig4String(pattern=@REXConfig4Field(value="[REGEX]"), min=[MIN_REPETITIONS], max=[MAX_REPETITIONS])
 	private OtherAnnotatedModelClass secondField;
 
-	@REXConfig4ListElement(pattern=@REXConfig4Field(value="[REGEX]", prefix="[REGEX]"), min=0)
+	@REXConfig4ListElement(pattern=@REXConfig4Field(value="[REGEX]", prefix="[REGEX]"))
 	private List<YetAnotherModelAnnotatedClass> thirdField;
 
 ```
@@ -110,7 +110,7 @@ do the data population directly onto the field; all of this using reflection.
 This is the simplest of cases one can use with this framework since it only populates String fields.
 Let's augment our `MyURI` class to explore the rest of the features supported.
 
-#### Nested Objects
+### Nested Objects
 
 Let's expand the structure of our uri text to include login information to `[scheme]://[LOGIN]@[host]:[port]/[path]#[fragment]`;
 where `LOGIN` itself has the structure `[user]:[password]`. Then we would need a class to hold these values such as this:
@@ -132,7 +132,7 @@ where `LOGIN` itself has the structure `[user]:[password]`. Then we would need a
 Then we need to augment our original `MyURI` class with a new member object `MyURIAuth` (to hold this additional information)
 and its respective annotations (to instruct the framework about its **binding rules**):
 
-**Before**
+*Before*
 ```java
 
 	@REXConfig4Class(rexPieces={"scheme", "host", "port", "path", "fragment"})
@@ -142,7 +142,7 @@ and its respective annotations (to instruct the framework about its **binding ru
 
 ```
 
-**After**
+*After*
 ```java
 
 	@REXConfig4Class(rexPieces={"scheme", "login", "host", "port", "path", "fragment"})
@@ -157,11 +157,11 @@ and its respective annotations (to instruct the framework about its **binding ru
 
 ... and that's it.
 
-#### List of Strings
+### List of Strings
 
 Let's transform out path from a single `String` into a list of strings holding each of the *path branches*:
 
-**Before**
+*Before*
 ```java
 
 	@REXConfig4Class(rexPieces={"scheme", "host", "port", "path", "fragment"})
@@ -176,7 +176,7 @@ Let's transform out path from a single `String` into a list of strings holding e
 
 ```
 
-**After**
+*After*
 ```java
 
 	@REXConfig4Class(rexPieces={"scheme", "host", "port", "path", "fragment"})
@@ -194,7 +194,7 @@ Let's transform out path from a single `String` into a list of strings holding e
 ... and that's it. Since we only changed our minds how we wanted to hold the same data, we just needed to change our model and
 its **binding rules** to instruct the framework of the new preferences.
 
-#### List of nested objects
+### List of nested objects
 
 Let's add parameters to the structure of the URI: `[scheme]://[LOGIN]@[host]:[port]/[path]?[PARAMETERS]#[fragment]`.
 In this structure `PARAMETERS` will be a list of nested objects, each with the structure `[paramName]:[paramValue]`
@@ -216,7 +216,7 @@ each delimited with a `&`. Then we would need a class to hold these values such 
 
 Then we need to augment out `MyURI` class with this extra field:
 
-**Before**
+*Before*
 ```java
 
 	@REXConfig4Class(rexPieces={"scheme", "host", "port", "path", "fragment"})
@@ -226,7 +226,7 @@ Then we need to augment out `MyURI` class with this extra field:
 
 ```
 
-**After**
+*After*
 ```java
 
 	@REXConfig4Class(rexPieces={"scheme", "host", "port", "path", "params", "fragment"})
